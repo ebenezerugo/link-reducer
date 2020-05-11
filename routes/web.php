@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard.index');
-});
+Route::get('/', "LinkController@index");
+
+Route::get('qrcode', "LinkController@qrcode");
