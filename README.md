@@ -3,9 +3,10 @@
 ### v1-beta Release
 
 ## Features
-1. View all Links .
+1. View all Links.
 2. Save a Link.
 3. Delete a Link
+4. Get Link through json api
 
 ## Installation
 
