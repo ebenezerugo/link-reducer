@@ -21,18 +21,31 @@
         </div>
 
         <div class="row">
-            <div class="link-item">
-                <div class="link-item-content">
-                    <img src="{{ asset('images/blackberry.svg') }}" class="rounded qr-image float-left" alt="QR Code">
-                    <span class="action-icon"><i class="fas fa-trash trash-icon"></i></span>
-                    <span class="action-icon"><i class="fas fa-edit edit-icon"></i></span>
-                    <span class="link-information">
-                        <p>Name: Louis Vuitton</p>
-                        <p>Description: A nice bag for moving around</p>
-                        <span>Link: https://www.louisvuitton.com</span>
-                    </span>
-                </div>    
-            </div>
+
+            @foreach($links as $link)
+                <div class="link-item">
+                    <div class="link-item-content">
+                        <img src="{{ asset($link->qrCode) }}" class="rounded qr-image float-left" alt="QR Code">
+                        <a href="{{ route('destroy',$link->id)}}">
+                            <span class="action-icon">
+                                <i class="fas fa-trash trash-icon"></i>
+                            </span>
+                        </a>
+                        <a href="{{ route('edit',$link->id)}}">
+                            <span class="action-icon">
+                                <i class="fas fa-edit edit-icon"></i>
+                            </span>
+                        </a>
+
+                        <span class="link-information">
+                            <p>Name: {{$link->name}}</p>
+                            <p>Description: {{$link->description}}</p>
+                            <span>Link: {{$link->link}}</span>
+                        </span>
+                    </div>    
+                </div>
+            @endforeach
+
         </div>
 
 
@@ -45,34 +58,45 @@
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <form class="form">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div><br />
+                        @endif
+                    <form class="form" method="POST" action="{{ route('store')}}">
+                            @csrf
+                        <div class="modal-body">
+                        
                             <div class="form-group">
                                 <label class="label" for="name">Name</label>
                                 <div class="input-group input-group-lg">
-                                    <input type="text" class="form-control input-field" id="name">
+                                    <input name="name" type="text" class="form-control input-field" id="name" required>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="label" for="description">Description</label>
                                 <div class="input-group input-group-lg">
-                                    <input type="text" class="form-control input-field" id="description">
+                                    <input name="description" type="text" class="form-control input-field" id="description">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="label" for="link">Link</label>
                                 <div class="input-group input-group-lg">
-                                    <input type="text" class="form-control input-field" id="link">
+                                    <input name="link" type="text" class="form-control input-field" id="link" required>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                        <button type="button" class="btn btn-primary btn-lg">Save</button>
-                    </div>
+                       
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

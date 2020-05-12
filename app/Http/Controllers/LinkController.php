@@ -15,12 +15,17 @@ class LinkController extends Controller
      */
     public function index()
     {
-        return view('dashboard.index');
+        $links = Link::orderBy('created_at', 'desc')->get();
+        return view('dashboard.index', compact('links'));
+    }
+
+    public function indexApi()
+    {
+        return Link::orderBy('created_at', 'desc')->get();
     }
 
     public function qrCode() {
-
-        return Link::generateQrCode('www.facebook.com');
+        return QrCode::size(500)->backgroundColor(239,243,198)->generate('W3Adda Laravel Tutorial');
     }
 
     /**
@@ -41,7 +46,29 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'description'=>'',
+            'link'=>'required'
+        ]);
+
+        $generatedCode = Link::generateQrCode($request->get('link'));
+
+        // $link = new Link([
+        //     'name' => $request->get('name'),
+        //     'description' => $request->get('description'),
+        //     'link' => $request->get('link'),
+        //     'qrCode' => $generatedCode['qrCode']
+        // ]);
+        // $link->save();
+        Link::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'link' => $request->link,
+            'qrCode' => $generatedCode['qrCode']
+        ]);
+
+        return redirect('/')->with('success', 'Link saved!');
     }
 
     /**
@@ -63,7 +90,7 @@ class LinkController extends Controller
      */
     public function edit(Link $link)
     {
-        //
+        return redirect('/')->with('success', 'Update feature coming soon!');
     }
 
     /**
@@ -84,8 +111,10 @@ class LinkController extends Controller
      * @param  \App\Link  $link
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Link $link)
+    public function destroy($id)
     {
-        //
+        $link = Link::find($id);
+        $link->delete();
+        return redirect('/')->with('success', 'Link deleted!');
     }
 }

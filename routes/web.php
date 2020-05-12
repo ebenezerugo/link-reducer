@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', "LinkController@index");
+Route::get('/', "LinkController@index")->name('index');
 
 Route::get('qrcode', "LinkController@qrcode");
+
+Route::post('store', "LinkController@store")->name('store');
+
+Route::get('edit/{link}', "LinkController@edit")->name('edit');
+
+Route::get('destroy/{link}', "LinkController@destroy")->name('destroy');
